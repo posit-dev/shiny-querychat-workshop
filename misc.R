@@ -1,15 +1,19 @@
-# Our goal is to build an app around these three pieces of code
+# Our goal is to build an app around these pieces of code
 
-# Loads datasets and tools
 library(tidyverse)
-georgia_mortality <- read.csv("data/georgia_mortality.csv")
-georgia_population <- read.csv("data/georgia_population.csv")
-
-# A map of the data
 library(leaflet)
-source("create_mortality_map.R") # defines create_mortality_map() function
-create_mortality_map(filter(georgia_mortality, Site == "Thyroid"), georgia_population)
-
-# A filtered table of the data
+library(sf)
+library(tigris)
 library(DT)
-datatable(filter(georgia_mortality, Site == "Thyroid"))
+
+peachtree_lottery <- readRDS("peachtree_lottery.RDS")
+
+source("lottery_helpers.R")
+
+create_lottery_map(peachtree_lottery, per_capita = TRUE)
+
+plot_per_capita_spend(age, color = "#66C2A5")
+plot_per_capita_spend(sex, color = "#8DA0CB")
+plot_per_capita_spend(income, color = "#E78AC3")
+
+datatable(peachtree_lottery)

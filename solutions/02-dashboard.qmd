@@ -1,0 +1,74 @@
+---
+title: "2025 Per Capita Peachtree Lottery Sales"
+date: "June 01, 2026"
+format: 
+  dashboard:
+    orientation: columns
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+<!-- Note: Move this file into your main directory before previewing. The filepaths used below will not work if you keep it in the solutions/ directory. -->
+
+## Group 1
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+library(leaflet)
+library(sf)
+library(tigris)
+library(DT)
+
+# load data
+peachtree_lottery <- readRDS("peachtree_lottery.RDS")
+
+# load mapping function
+source("lottery_helpers.R")
+```
+
+```{r}
+#| label: map
+#| fig-height: 6
+
+create_lottery_map(peachtree_lottery, per_capita = TRUE)
+```
+
+## Group 2 
+
+### Row {height=30%}
+
+```{r}
+#| label: age_group
+#| fig-height: 3
+#| fig-width: 2
+
+plot_per_capita_spend(age, color = "#66C2A5")
+```
+
+```{r}
+#| label: sex
+#| fig-height: 3
+#| fig-width: 2
+
+plot_per_capita_spend(sex, color = "#8DA0CB")
+```
+
+```{r}
+#| label: income
+#| fig-height: 3
+#| fig-width: 2
+
+plot_per_capita_spend(income, color = "#E78AC3")
+```
+
+### Data
+
+```{r}
+#| label: data-table
+
+datatable(peachtree_lottery)
+```
