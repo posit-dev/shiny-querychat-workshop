@@ -41,35 +41,15 @@ The map below shows lottery spending across Georgia counties. Darker colors indi
 create_lottery_map(peachtree_lottery, per_capita = TRUE)
 ```
 
-## Demographic distribution
+## Income distribution
 
-The charts below explore per-capita sales by age group, sex, and income level.
-
-:::{layout-ncol="3"}
-```{r}
-#| label: age_group
-#| fig-height: 3
-#| fig-width: 2
-
-plot_per_capita_spend(age, color = "#66C2A5")
-```
-
-```{r}
-#| label: sex
-#| fig-height: 3
-#| fig-width: 2
-
-plot_per_capita_spend(sex, color = "#8DA0CB")
-```
+The chart below explores per-capita sales by income group.
 
 ```{r}
 #| label: income
-#| fig-height: 3
-#| fig-width: 2
 
-plot_per_capita_spend(income, color = "#E78AC3")
+plot_per_capita_spend(peachtree_lottery, income)
 ```
-:::
 
 ## Detailed Data Table
 

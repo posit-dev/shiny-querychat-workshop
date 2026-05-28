@@ -29,11 +29,9 @@ ui <- page_sidebar(
     ),
     layout_columns(
       col_widths = 12,
-      layout_columns(
-        col_widths = c(4, 4, 4),
-        card(card_header("Age"), plotOutput("age_plot", height = "200px")),
-        card(card_header("Sex"), plotOutput("sex_plot", height = "200px")),
-        card(card_header("Income"), plotOutput("income_plot", height = "200px"))
+      card(
+        card_header("Income"), 
+        plotOutput("income_plot", height = "200px")
       ),
       card(
         card_header("Data"),
@@ -57,40 +55,8 @@ server <- function(input, output, session) {
     create_lottery_map(filtered_data(), per_capita = TRUE)
   })
 
-  output$age_plot <- renderPlot({
-    filtered_data() |>
-      group_by(age) |>
-      summarise(spend = sum(sales) / sum(n), .groups = "drop") |>
-      ggplot(aes(x = age, y = spend)) +
-      geom_col(fill = "#66C2A5") +
-      labs(title = "Age", x = "", y = "") +
-      scale_y_continuous(limits = c(0, 350)) +
-      theme_minimal() +
-      theme(plot.title = element_text(hjust = 0.5))
-  })
-
-  output$sex_plot <- renderPlot({
-    filtered_data() |>
-      group_by(sex) |>
-      summarise(spend = sum(sales) / sum(n), .groups = "drop") |>
-      ggplot(aes(x = sex, y = spend)) +
-      geom_col(fill = "#8DA0CB") +
-      labs(title = "Sex", x = "", y = "") +
-      scale_y_continuous(limits = c(0, 350)) +
-      theme_minimal() +
-      theme(plot.title = element_text(hjust = 0.5))
-  })
-
   output$income_plot <- renderPlot({
-    filtered_data() |>
-      group_by(income) |>
-      summarise(spend = sum(sales) / sum(n), .groups = "drop") |>
-      ggplot(aes(x = income, y = spend)) +
-      geom_col(fill = "#E78AC3") +
-      labs(title = "Income", x = "", y = "") +
-      scale_y_continuous(limits = c(0, 350)) +
-      theme_minimal() +
-      theme(plot.title = element_text(hjust = 0.5))
+    plot_per_capita_spend(filtered_data(), income)
   })
 
   output$data_table <- DT::renderDT({

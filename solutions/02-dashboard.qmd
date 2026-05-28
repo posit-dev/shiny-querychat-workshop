@@ -42,27 +42,9 @@ create_lottery_map(peachtree_lottery, per_capita = TRUE)
 ### Row {height=30%}
 
 ```{r}
-#| label: age_group
-#| fig-height: 3
-#| fig-width: 2
-
-plot_per_capita_spend(age, color = "#66C2A5")
-```
-
-```{r}
-#| label: sex
-#| fig-height: 3
-#| fig-width: 2
-
-plot_per_capita_spend(sex, color = "#8DA0CB")
-```
-
-```{r}
 #| label: income
-#| fig-height: 3
-#| fig-width: 2
 
-plot_per_capita_spend(income, color = "#E78AC3")
+plot_per_capita_spend(peachtree_lottery, income)
 ```
 
 ### Data

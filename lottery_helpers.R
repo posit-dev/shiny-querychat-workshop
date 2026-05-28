@@ -73,10 +73,10 @@ create_lottery_map <- function( data,
 
 # Helper function to create bar charts of per-capita lottery 
 # spending by demographic variable
-plot_per_capita_spend <- function(var, color = "#8DA0CB") {
+plot_per_capita_spend <- function(data, var, color = "steelblue") {
   label <- rlang::as_label(rlang::enquo(var))
 
-  peachtree_lottery |>
+  data |>
     group_by({{ var }}) |>
     summarise(spend = sum(sales) / sum(n)) |>
     ggplot(aes(x = {{ var }}, y = spend)) +
@@ -86,7 +86,6 @@ plot_per_capita_spend <- function(var, color = "#8DA0CB") {
       x = "",
       y = ""
     ) +
-    scale_y_continuous(limits = c(0, 550)) +
     theme_minimal() +
     theme(plot.title = element_text(hjust = 0.5))
 }
