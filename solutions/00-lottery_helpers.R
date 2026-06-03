@@ -97,4 +97,19 @@ create_lottery_map <- function(data,
 #'   `"steelblue"`.
 #'
 #' @return A `ggplot` object.
+plot_per_capita_spend <- function(data, var, color = "steelblue") {
+  label <- rlang::as_label(rlang::enquo(var))
 
+  data |>
+    group_by({{ var }}) |>
+    summarise(spend = sum(sales) / sum(n)) |>
+    ggplot(aes(x = {{ var }}, y = spend)) +
+    geom_col(fill = color) +
+    labs(
+      title = tools::toTitleCase(label),
+      x = "",
+      y = ""
+    ) +
+    theme_minimal() +
+    theme(plot.title = element_text(hjust = 0.5))
+}
