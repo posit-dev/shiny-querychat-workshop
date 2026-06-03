@@ -9,32 +9,33 @@ library(leaflet)
 library(sf)
 library(tigris)
 library(DT)
+library(querychat) # Load querychat
 
-# Load data and helpers
 peachtree_lottery <- readRDS("peachtree_lottery.RDS")
 source("lottery_helpers.R")
 
 # Setup querychat
-library(querychat)
 qc <- QueryChat$new(peachtree_lottery, greeting = "Hi! How can I help you explore Peachtree Lottery sales?")
 
 ui <- page_sidebar(
   title = "2025 Per Capita Peachtree Lottery Sales",
-  sidebar = qc$sidebar(),
+  sidebar = qc$sidebar(), # Add querychat sidebar elements
   layout_columns(
     col_widths = c(6, 6),
     card(
-      card_header("Lottery Sales Map"),
-      leafletOutput("map", height = "500px")
+      full_screen = TRUE,
+      card_header("Map"),
+      leafletOutput("map", height = "100%")
     ),
     layout_columns(
-      col_widths = 12,
+      col_widths = c(12, 12),
       card(
-        card_header("Income"), 
-        plotOutput("income_plot", height = "200px")
+        card_header("Income"),
+        plotOutput("income_plot", height="150px")
       ),
       card(
         card_header("Data"),
+        full_screen = TRUE,
         DTOutput("data_table")
       )
     )
@@ -44,7 +45,6 @@ ui <- page_sidebar(
 server <- function(input, output, session) {
 
   # Add querychat server-side elements
-
   qc_vals <- qc$server()
 
   filtered_data <- reactive({

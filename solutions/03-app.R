@@ -13,37 +13,34 @@ library(DT)
 # Load data and helpers
 peachtree_lottery <- readRDS("peachtree_lottery.RDS")
 source("lottery_helpers.R")
-
-# Extract unique filter values
-counties  <- sort(unique(peachtree_lottery$county))
-ages      <- sort(unique(peachtree_lottery$age))
-sexes     <- sort(unique(peachtree_lottery$sex))
-races     <- sort(unique(peachtree_lottery$race))
-incomes   <- sort(unique(peachtree_lottery$income))
+age_levels <- levels(peachtree_lottery$age)
 
 ui <- page_sidebar(
   title = "2025 Per Capita Peachtree Lottery Sales",
   sidebar = sidebar(
-    selectInput("county", "County", choices = c("All", counties), selected = "All"),
-    selectInput("age", "Age", choices = c("All", ages), selected = "All"),
-    selectInput("sex", "Sex", choices = c("All", sexes), selected = "All"),
-    selectInput("race", "Race", choices = c("All", races), selected = "All"),
-    selectInput("income", "Income", choices = c("All", incomes), selected = "All")
+    selectInput(
+      "age",
+      "Filter by Age",
+      choices  = age_levels,
+      selected = age_levels[1]
+    )
   ),
   layout_columns(
     col_widths = c(6, 6),
     card(
-      card_header("Lottery Sales Map"),
-      leafletOutput("map", height = "500px")
+      full_screen = TRUE,
+      card_header("Map"),
+      leafletOutput("map", height = "100%")
     ),
     layout_columns(
-      col_widths = 12,
+      col_widths = c(12, 12),
       card(
-        card_header("Income"), 
-        plotOutput("income_plot", height = "200px")
+        card_header("Income"),
+        plotOutput("income_plot", height="150px")
       ),
       card(
         card_header("Data"),
+        full_screen = TRUE,
         DTOutput("data_table")
       )
     )
@@ -53,13 +50,9 @@ ui <- page_sidebar(
 server <- function(input, output, session) {
 
   filtered_data <- reactive({
-    d <- peachtree_lottery
-    if (input$county != "All") d <- d |> filter(county == input$county)
-    if (input$age != "All")    d <- d |> filter(age == input$age)
-    if (input$sex != "All")    d <- d |> filter(sex == input$sex)
-    if (input$race != "All")   d <- d |> filter(race == input$race)
-    if (input$income != "All") d <- d |> filter(income == input$income)
-    d
+    req(input$age)
+    peachtree_lottery |>
+      filter(age %in% input$age)
   })
 
   output$map <- renderLeaflet({
@@ -70,7 +63,7 @@ server <- function(input, output, session) {
     plot_per_capita_spend(filtered_data(), income)
   })
 
-  output$data_table <- DT::renderDT({
+  output$data_table <- renderDT({
     datatable(filtered_data())
   })
 }
