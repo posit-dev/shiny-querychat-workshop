@@ -7,6 +7,8 @@ execute:
   message: false
 ---
 
+<!-- Note: Move this file into your main directory before previewing. The filepaths used below will not work if you keep it in the solutions/ directory. -->
+
 ## Overview
 
 Cancer incidence varies significantly across Georgia counties and demographic groups. This report examines diagnosed cancer cases in 2025, exploring how rates differ by race/ethnicity and where cases are concentrated geographically.
@@ -14,6 +16,17 @@ Cancer incidence varies significantly across Georgia counties and demographic gr
 ```{r}
 #| label: setup
 
+library(tidyverse)
+library(leaflet)
+library(sf)
+library(tigris)
+library(DT)
+
+# load data
+georgia_cases <- readRDS("georgia_cases.RDS")
+
+# load mapping function
+source("helpers.R")
 ```
 
 ## Geographic Distribution
@@ -24,7 +37,7 @@ The map below shows cancer incidence rates across Georgia counties. Darker color
 #| label: map
 #| fig-height: 6
 
-
+create_incidence_map(georgia_cases, rate = TRUE)
 ```
 
 ## Incidence by Race/Ethnicity
@@ -34,7 +47,7 @@ The chart below explores cancer incidence rates by race/ethnicity group.
 ```{r}
 #| label: income
 
-
+plot_incidence_by_demographic(georgia_cases, RE)
 ```
 
 ## Detailed Data Table
@@ -44,6 +57,7 @@ The table below provides the complete cancer cases dataset, which can be searche
 ```{r}
 #| label: data-table
 
+datatable(georgia_cases)
 ```
 
 ---
