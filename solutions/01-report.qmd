@@ -57,7 +57,7 @@ The table below provides the complete cancer cases dataset, which can be searche
 ```{r}
 #| label: data-table
 
-datatable(georgia_cases)
+datatable(georgia_cases, options = list(pageLength = 10, bPaginate = TRUE, dom = 'ltipr'))
 ```
 
 ---
