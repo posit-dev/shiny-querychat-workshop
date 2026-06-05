@@ -31,7 +31,7 @@ ui <- page_sidebar(
       col_widths = c(12, 12),
       card(
         card_header("Incidence by Race/Ethnicity"),
-        plotOutput("income_plot", height="150px")
+        plotOutput("plot", height="150px")
       ),
       card(
         card_header("Data"),
@@ -55,7 +55,7 @@ server <- function(input, output, session) {
     create_incidence_map(filtered_data(), rate = TRUE)
   })
 
-  output$income_plot <- renderPlot({
+  output$plot <- renderPlot({
     plot_incidence_by_demographic(filtered_data(), RE)
   })
 
