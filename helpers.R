@@ -112,4 +112,24 @@ create_incidence_map <- function(data,
 #' @param color Character. Fill color for the bars. Defaults to `"steelblue"`.
 #'
 #' @return A `ggplot` object.
+plot_incidence_by_demographic <- function(data, var, color = "steelblue") {
+  var <- enquo(var)
 
+  data |>
+    group_by(!!var) |>
+    summarise(
+      rate = sum(Cases, na.rm = TRUE) / sum(n, na.rm = TRUE) * 1e5,
+      .groups = "drop"
+    ) |>
+    ggplot(aes(x = !!var, y = rate)) +
+    geom_col(fill = color) +
+    labs(
+      title = "Cancer Incidence Rate by Demographic Group",
+      x = quo_name(var),
+      y = "Diagnosed Cases per 100,000"
+    ) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+}
